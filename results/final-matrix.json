@@ -1,0 +1,431 @@
+{
+  "environment": {
+    "node": "v24.16.0",
+    "pnpm": "11.22.0",
+    "platform": "darwin arm64"
+  },
+  "graphParity": {
+    "moduleCount": 12365,
+    "resolverRequests": 31157,
+    "bareResolverRequests": 5675
+  },
+  "watchBuildCount": 5,
+  "resourceTrials": [
+    {
+      "declaredNodeLinker": "hoisted",
+      "usesPnpmVirtualStore": false,
+      "rspack": "2.0.4",
+      "trial": 1,
+      "cold": {
+        "elapsedMilliseconds": 2613,
+        "peakRssKibibytes": 1217696
+      },
+      "watch": {
+        "elapsedMilliseconds": 13377,
+        "watchPeakRssKibibytes": 1838304,
+        "watchFirstBuildPeakRssKibibytes": 1193760,
+        "watchFinalBuildPeakRssKibibytes": 1838304,
+        "watchFinalMinusFirstPeakRssKibibytes": 644544
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 3473,
+        "absolutePathBytes": 438046,
+        "rootRelativePathBytes": 236612
+      }
+    },
+    {
+      "declaredNodeLinker": "hoisted",
+      "usesPnpmVirtualStore": false,
+      "rspack": "2.0.4",
+      "trial": 2,
+      "cold": {
+        "elapsedMilliseconds": 2657,
+        "peakRssKibibytes": 1213376
+      },
+      "watch": {
+        "elapsedMilliseconds": 13399,
+        "watchPeakRssKibibytes": 1861056,
+        "watchFirstBuildPeakRssKibibytes": 1227584,
+        "watchFinalBuildPeakRssKibibytes": 1861056,
+        "watchFinalMinusFirstPeakRssKibibytes": 633472
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 3473,
+        "absolutePathBytes": 438046,
+        "rootRelativePathBytes": 236612
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.0.4",
+      "trial": 1,
+      "cold": {
+        "elapsedMilliseconds": 2867,
+        "peakRssKibibytes": 1251056
+      },
+      "watch": {
+        "elapsedMilliseconds": 14364,
+        "watchPeakRssKibibytes": 1934976,
+        "watchFirstBuildPeakRssKibibytes": 1280816,
+        "watchFinalBuildPeakRssKibibytes": 1934976,
+        "watchFinalMinusFirstPeakRssKibibytes": 654160
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 4737,
+        "absolutePathBytes": 1164324,
+        "rootRelativePathBytes": 889578
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.0.4",
+      "trial": 2,
+      "cold": {
+        "elapsedMilliseconds": 2754,
+        "peakRssKibibytes": 1253408
+      },
+      "watch": {
+        "elapsedMilliseconds": 14693,
+        "watchPeakRssKibibytes": 1926736,
+        "watchFirstBuildPeakRssKibibytes": 1273872,
+        "watchFinalBuildPeakRssKibibytes": 1926736,
+        "watchFinalMinusFirstPeakRssKibibytes": 652864
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 4737,
+        "absolutePathBytes": 1164324,
+        "rootRelativePathBytes": 889578
+      }
+    },
+    {
+      "declaredNodeLinker": "hoisted",
+      "usesPnpmVirtualStore": false,
+      "rspack": "2.1.9",
+      "trial": 1,
+      "cold": {
+        "elapsedMilliseconds": 776,
+        "peakRssKibibytes": 1158816
+      },
+      "watch": {
+        "elapsedMilliseconds": 4187,
+        "watchPeakRssKibibytes": 2027440,
+        "watchFirstBuildPeakRssKibibytes": 1158096,
+        "watchFinalBuildPeakRssKibibytes": 2027440,
+        "watchFinalMinusFirstPeakRssKibibytes": 869344
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 3473,
+        "absolutePathBytes": 438046,
+        "rootRelativePathBytes": 236612
+      }
+    },
+    {
+      "declaredNodeLinker": "hoisted",
+      "usesPnpmVirtualStore": false,
+      "rspack": "2.1.9",
+      "trial": 2,
+      "cold": {
+        "elapsedMilliseconds": 787,
+        "peakRssKibibytes": 1168416
+      },
+      "watch": {
+        "elapsedMilliseconds": 4043,
+        "watchPeakRssKibibytes": 2028272,
+        "watchFirstBuildPeakRssKibibytes": 1154224,
+        "watchFinalBuildPeakRssKibibytes": 2028272,
+        "watchFinalMinusFirstPeakRssKibibytes": 874048
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 3473,
+        "absolutePathBytes": 438046,
+        "rootRelativePathBytes": 236612
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.1.9",
+      "trial": 1,
+      "cold": {
+        "elapsedMilliseconds": 790,
+        "peakRssKibibytes": 1203664
+      },
+      "watch": {
+        "elapsedMilliseconds": 4025,
+        "watchPeakRssKibibytes": 2038240,
+        "watchFirstBuildPeakRssKibibytes": 1208976,
+        "watchFinalBuildPeakRssKibibytes": 2038240,
+        "watchFinalMinusFirstPeakRssKibibytes": 829264
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 4737,
+        "absolutePathBytes": 1164324,
+        "rootRelativePathBytes": 889578
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.1.9",
+      "trial": 2,
+      "cold": {
+        "elapsedMilliseconds": 754,
+        "peakRssKibibytes": 1201408
+      },
+      "watch": {
+        "elapsedMilliseconds": 4484,
+        "watchPeakRssKibibytes": 2093056,
+        "watchFirstBuildPeakRssKibibytes": 1211200,
+        "watchFinalBuildPeakRssKibibytes": 2093056,
+        "watchFinalMinusFirstPeakRssKibibytes": 881856
+      },
+      "moduleCount": 12365,
+      "resolverRequests": 31157,
+      "bareResolverRequests": 5675,
+      "deduplicatedCompilationMissingDependencies": {
+        "count": 4737,
+        "absolutePathBytes": 1164324,
+        "rootRelativePathBytes": 889578
+      }
+    }
+  ],
+  "scaledWarmReplay": [
+    {
+      "declaredNodeLinker": "hoisted",
+      "usesPnpmVirtualStore": false,
+      "rspack": "2.0.4",
+      "passes": [
+        {
+          "pass": 1,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 21104,
+          "missingNodeModulesRecordCount": 1097,
+          "absolutePathBytes": 2601984,
+          "rootRelativePathBytes": 1377952
+        },
+        {
+          "pass": 2,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 20007,
+          "missingNodeModulesRecordCount": 0,
+          "absolutePathBytes": 2460227,
+          "rootRelativePathBytes": 1299821
+        }
+      ],
+      "stability": {
+        "byteIdentical": false,
+        "metricsIdentical": false
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.0.4",
+      "passes": [
+        {
+          "pass": 1,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 21406,
+          "missingNodeModulesRecordCount": 1253,
+          "absolutePathBytes": 5539402,
+          "rootRelativePathBytes": 4297854
+        },
+        {
+          "pass": 2,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 20153,
+          "missingNodeModulesRecordCount": 0,
+          "absolutePathBytes": 5220086,
+          "rootRelativePathBytes": 4051212
+        }
+      ],
+      "stability": {
+        "byteIdentical": false,
+        "metricsIdentical": false
+      }
+    },
+    {
+      "declaredNodeLinker": "hoisted",
+      "usesPnpmVirtualStore": false,
+      "rspack": "2.1.9",
+      "passes": [
+        {
+          "pass": 1,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 52723,
+          "missingNodeModulesRecordCount": 32716,
+          "absolutePathBytes": 6024320,
+          "rootRelativePathBytes": 2966386
+        },
+        {
+          "pass": 2,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 52723,
+          "missingNodeModulesRecordCount": 32716,
+          "absolutePathBytes": 6024320,
+          "rootRelativePathBytes": 2966386
+        }
+      ],
+      "stability": {
+        "byteIdentical": true,
+        "metricsIdentical": true
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.1.9",
+      "passes": [
+        {
+          "pass": 1,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 52867,
+          "missingNodeModulesRecordCount": 32714,
+          "absolutePathBytes": 13242765,
+          "rootRelativePathBytes": 10176479
+        },
+        {
+          "pass": 2,
+          "occurrenceCount": 5675,
+          "uniquePairCount": 3811,
+          "missingRecordCount": 52867,
+          "missingNodeModulesRecordCount": 32714,
+          "absolutePathBytes": 13242765,
+          "rootRelativePathBytes": 10176479
+        }
+      ],
+      "stability": {
+        "byteIdentical": true,
+        "metricsIdentical": true
+      }
+    }
+  ],
+  "boundaryMechanism": [
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.0.4",
+      "oneRequestWarm": {
+        "missingRecordCount": 1,
+        "missingNodeModulesRecordCount": 0,
+        "rootRelativePathBytes": 117
+      },
+      "scaledWarmReplayPasses": [
+        {
+          "missingRecordCount": 21406,
+          "rootRelativePathBytes": 4297854
+        },
+        {
+          "missingRecordCount": 20153,
+          "rootRelativePathBytes": 4051212
+        }
+      ],
+      "stability": {
+        "byteIdentical": false,
+        "metricsIdentical": false
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.0.5",
+      "oneRequestWarm": {
+        "missingRecordCount": 1,
+        "missingNodeModulesRecordCount": 0,
+        "rootRelativePathBytes": 117
+      },
+      "scaledWarmReplayPasses": [
+        {
+          "missingRecordCount": 21406,
+          "rootRelativePathBytes": 4297854
+        },
+        {
+          "missingRecordCount": 20153,
+          "rootRelativePathBytes": 4051212
+        }
+      ],
+      "stability": {
+        "byteIdentical": false,
+        "metricsIdentical": false
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.0.6",
+      "oneRequestWarm": {
+        "missingRecordCount": 5,
+        "missingNodeModulesRecordCount": 4,
+        "rootRelativePathBytes": 527
+      },
+      "scaledWarmReplayPasses": [
+        {
+          "missingRecordCount": 52867,
+          "rootRelativePathBytes": 10176479
+        },
+        {
+          "missingRecordCount": 52867,
+          "rootRelativePathBytes": 10176479
+        }
+      ],
+      "stability": {
+        "byteIdentical": true,
+        "metricsIdentical": true
+      }
+    },
+    {
+      "declaredNodeLinker": "isolated",
+      "usesPnpmVirtualStore": true,
+      "rspack": "2.1.9",
+      "oneRequestWarm": {
+        "missingRecordCount": 5,
+        "missingNodeModulesRecordCount": 4,
+        "rootRelativePathBytes": 527
+      },
+      "scaledWarmReplayPasses": [
+        {
+          "missingRecordCount": 52867,
+          "rootRelativePathBytes": 10176479
+        },
+        {
+          "missingRecordCount": 52867,
+          "rootRelativePathBytes": 10176479
+        }
+      ],
+      "stability": {
+        "byteIdentical": true,
+        "metricsIdentical": true
+      }
+    }
+  ]
+}
