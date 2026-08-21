@@ -1,0 +1,10 @@
+{
+  "name": "@copy-repro/relay-d",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@copy-repro/branch-a": "workspace:*",
+    "@copy-repro/branch-b": "workspace:*",
+    "@copy-repro/branch-c": "workspace:*"
+  }
+}

@@ -1,0 +1,28 @@
+asset index.html 193 bytes [emitted] [from: index.html] [copied]
+asset bundle.js 67 bytes [emitted] (name: main)
+./src/index.js 51 bytes [built] [code generated]
+Rspack compiled in 85.21 s (9e2b16be98e9b848)
+real 85.92
+user 7.54
+sys 78.06
+           219283456  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               34793  page reclaims
+                 298  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                  24  messages sent
+                  45  messages received
+                   0  signals received
+                  50  voluntary context switches
+               17929  involuntary context switches
+          4664857467  instructions retired
+          1395714350  cycles elapsed
+           164341624  peak memory footprint
+
+Output SHA-256:
+46dc534e192706175ec6ff369a7438c22e86fd1e27ce83b3190a77af076905ba  dist/bundle.js
+f37dbb8d4d8553e9182a0c4503d239a52caa88c64ff28c53e05ba66b7fbfeca0  dist/index.html

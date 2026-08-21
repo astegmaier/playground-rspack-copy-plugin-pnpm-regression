@@ -1,0 +1,11 @@
+{
+  "name": "@copy-repro/fanout-a",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@copy-repro/relay-a": "workspace:*",
+    "@copy-repro/relay-b": "workspace:*",
+    "@copy-repro/relay-c": "workspace:*",
+    "@copy-repro/relay-d": "workspace:*"
+  }
+}

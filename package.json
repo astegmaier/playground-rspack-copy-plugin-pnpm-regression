@@ -1,24 +1,6 @@
 {
-  "name": "rspack-pnpm-resolver-regression",
+  "name": "rspack-copy-plugin-pnpm-regression",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "packageManager": "pnpm@11.22.0",
-  "scripts": {
-    "benchmark": "pnpm run benchmark:cold && pnpm run benchmark:mechanism && pnpm run benchmark:watch",
-    "benchmark:cold": "node scripts/benchmark.mjs --mode=cold",
-    "benchmark:mechanism": "node scripts/benchmark.mjs --mode=mechanism",
-    "benchmark:watch": "node scripts/benchmark.mjs --mode=watch --watch-builds=5",
-    "layout": "node scripts/assert-layout.mjs",
-    "test": "node --test test/*.test.mjs"
-  },
-  "devDependencies": {
-    "@fluentui/react": "8.125.7",
-    "@fluentui/react-components": "9.74.4",
-    "@fluentui/react-icons": "2.0.332",
-    "@rspack/core": "2.1.9",
-    "date-fns": "4.1.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
-  }
+  "packageManager": "pnpm@11.22.0"
 }

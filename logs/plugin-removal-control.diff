@@ -1,0 +1,20 @@
+--- a/apps/artifact-viewer/rspack.config.cjs
++++ b/apps/artifact-viewer/rspack.config.cjs
+@@ -1,5 +1,4 @@
+ const path = require("node:path");
+-const { CopyRspackPlugin } = require("@rspack/core");
+ 
+ module.exports = {
+   mode: "production",
+@@ -13,11 +12,6 @@ module.exports = {
+   optimization: {
+     minimize: false,
+   },
+-  plugins: [
+-    new CopyRspackPlugin({
+-      patterns: [{ from: "./index.html", to: "./" }],
+-    }),
+-  ],
+   stats: {
+     all: false,
+     assets: true,

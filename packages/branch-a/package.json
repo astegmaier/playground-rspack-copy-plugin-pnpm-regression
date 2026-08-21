@@ -1,0 +1,10 @@
+{
+  "name": "@copy-repro/branch-a",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@copy-repro/leaf-a": "workspace:*",
+    "@copy-repro/leaf-b": "workspace:*",
+    "@copy-repro/leaf-c": "workspace:*"
+  }
+}

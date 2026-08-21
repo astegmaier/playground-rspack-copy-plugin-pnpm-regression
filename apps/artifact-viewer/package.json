@@ -1,0 +1,13 @@
+{
+  "name": "@copy-repro/artifact-viewer",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@copy-repro/fanout-a": "workspace:*",
+    "@copy-repro/fanout-b": "workspace:*",
+    "@copy-repro/fanout-c": "workspace:*",
+    "@copy-repro/fanout-d": "workspace:*",
+    "@rspack/cli": "2.0.4",
+    "@rspack/core": "2.0.4"
+  }
+}

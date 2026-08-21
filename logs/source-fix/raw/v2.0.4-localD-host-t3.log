@@ -1,0 +1,102 @@
+{
+  "label": "v2.0.4-localD-host-t3",
+  "rspackRoot": "/Users/andrew/projects/rspack-causal-artifacts/rspack-versions/v2.0.4-localD",
+  "rspackCoreDir": "/Users/andrew/projects/rspack-causal-artifacts/rspack-versions/v2.0.4-localD/node_modules/@rspack/core",
+  "resolvedCoreVersion": "2.0.4",
+  "bindingEntry": "/Users/andrew/projects/rspack-causal-artifacts/rspack-versions/v2.0.4-localD/node_modules/@rspack/core/dist/index.js",
+  "nativeBinding": "/Users/andrew/projects/rspack-causal-artifacts/rspack-versions/v2.0.4-localD/node_modules/@rspack/binding-darwin-arm64/rspack.darwin-arm64.node",
+  "nativeBindingBytes": 40120992,
+  "nativeBindingMtime": "2026-08-21T03:42:56.977Z",
+  "configFile": "rspack.web-previewer.config.js",
+  "configurationIndex": 0,
+  "pluginNames": [
+    "DefinePlugin",
+    "CopyRspackPlugin"
+  ],
+  "packageDir": "/Users/andrew/projects/office-bohemia5/packages/artifact-viewer",
+  "outputDirectory": "/Users/andrew/projects/rspack-causal-artifacts/bench-output/v2.0.4-localD-host-t3",
+  "node": "v24.16.0",
+  "elapsedSeconds": 0.128,
+  "phases": {
+    "beforeRun": 4,
+    "beforeRun:last": 4,
+    "compile": 4,
+    "compile:last": 4,
+    "thisCompilation": 6,
+    "thisCompilation:last": 6,
+    "make": 7,
+    "make:last": 7,
+    "firstBuildModule": 8,
+    "firstBuildModule:last": 75,
+    "firstSucceedModule": 8,
+    "firstSucceedModule:last": 75,
+    "finishMake": 75,
+    "finishMake:last": 75,
+    "finishModules": 78,
+    "finishModules:last": 78,
+    "seal": 78,
+    "seal:last": 78,
+    "optimizeModules": 84,
+    "optimizeModules:last": 84,
+    "afterOptimizeModules": 84,
+    "afterOptimizeModules:last": 84,
+    "optimizeTree": 84,
+    "optimizeTree:last": 84,
+    "optimizeChunkModules": 85,
+    "optimizeChunkModules:last": 85,
+    "beforeModuleIds": 86,
+    "beforeModuleIds:last": 86,
+    "processAssetsStart": 91,
+    "processAssetsStart:last": 91,
+    "processAssetsAfterMinimize": 121,
+    "processAssetsAfterMinimize:last": 121,
+    "afterProcessAssets": 121,
+    "afterProcessAssets:last": 121,
+    "afterSeal": 121,
+    "afterSeal:last": 121,
+    "emit": 121,
+    "emit:last": 121,
+    "afterEmit": 128,
+    "afterEmit:last": 128,
+    "afterCompile": 128,
+    "afterCompile:last": 128,
+    "done": 128,
+    "done:last": 128
+  },
+  "peakSampledRssMb": 189.7,
+  "maxRssMb": 189.7,
+  "userCpuSeconds": 0.276,
+  "systemCpuSeconds": 0.206,
+  "voluntaryContextSwitches": 0,
+  "involuntaryContextSwitches": 16181,
+  "fsRead": 0,
+  "fsWrite": 0,
+  "hasErrors": false,
+  "hasWarnings": false,
+  "errorCount": 0,
+  "moduleCount": 151,
+  "missingDependencyCount": 299,
+  "fileDependencyCount": 222,
+  "contextDependencyCount": 1,
+  "firstErrors": []
+}
+real 0.18
+user 0.27
+sys 0.20
+           199737344  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               13072  page reclaims
+                  84  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+               16245  involuntary context switches
+          3822415763  instructions retired
+          2056885690  cycles elapsed
+           140516288  peak memory footprint

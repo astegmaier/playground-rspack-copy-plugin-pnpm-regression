@@ -1,217 +1,227 @@
-# Rspack pnpm warm-resolver regression fixture
+# Rspack CopyRspackPlugin pnpm wall-time repro
 
-This is a minimal, public-package-only Rspack fixture for the pnpm
-warm-resolver regression. It keeps the build graph near the Boot compiler's
-shape while proving the exact resolver behavior through Rspack's public
-`ResolverFactory` API.
+**This is a direct, reproducible wall-time regression.** With the checked-in
+source and configuration, `@rspack/core@2.0.4`,
+`@rspack/cli@2.0.4`, and pnpm `nodeLinker: isolated` take a **53.10 second
+median** to copy one literal `index.html` file. The same one-module build takes
+**0.71 seconds** when only core is 2.0.3, with the CLI still 2.0.4, and
+**0.69 seconds** with core and CLI 2.0.4 plus `nodeLinker: hoisted`.
 
-The canonical state is pnpm `11.22.0`, `nodeLinker: isolated`, and
-`@rspack/core@2.1.9`. `pnpm-lock.yaml` matches that state.
+The fixture deliberately has no benchmark harness. The measurement command is
+always:
 
-## Graph
+```sh
+/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
+```
 
-The root package has no workspace packages or workspace diamond. A temporary
-peer-diamond was removed because it changed the isolated module graph and made
-the linker comparison invalid.
+The canonical checked-in cell is the affected one: pnpm 11.22.0,
+`nodeLinker: isolated`, `@rspack/core@2.0.4`, and `@rspack/cli@2.0.4`.
 
-`src/public-graph.cjs` uses only published package distributions:
+## Run the checked-in affected cell
 
-| Graph source | Purpose |
-| --- | --- |
-| `@fluentui/react-icons@2.0.332` ESM and CommonJS SVG atoms | Large public fan-out without generated imports. |
-| `@fluentui/react@8.125.7` ESM components | Bare Fluent and React requests from component modules. |
-| `@fluentui/react-components@9.74.4` ESM and CommonJS roots | Largest bare-package request fan-out. |
-| `date-fns@4.1.0` | Public recursive utility graph; its published `_lib/test.js` helper is excluded because it imports test-only code. |
-
-The aliases in `rspack.config.mjs` derive package distribution directories with
-`require.resolve()`, so they follow the active linker instead of embedding a
-pnpm virtual-store path. No source, package, or import list is generated.
-
-Every final resource trial had the same graph:
-
-| Metric | Value |
-| --- | ---: |
-| Modules | 12,365 |
-| Factorization requests | 31,157 |
-| Bare package requests | 5,675 |
-
-`lucide-react` and `@sinclair/typebox` were evaluated and removed because they
-added mostly relative-request modules without strengthening the affected
-`node_modules` traversal.
-
-## Running
+From a fresh checkout:
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm layout
-pnpm test
-pnpm benchmark
+cd apps/artifact-viewer
+rm -rf dist
+/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
 ```
 
-Every benchmark result contains `declaredNodeLinker` and
-`usesPnpmVirtualStore`. It fails before compiling if the declared linker and
-observed layout disagree.
+Repeat the last two commands in three separately started shell processes to
+make three fresh-process trials. On macOS, `/usr/bin/time -lp` reports portable
+POSIX wall time plus `maximum resident set size` and `peak memory footprint`.
+On systems without that implementation, use the portable command below for
+wall time, or Linux `/usr/bin/time -v` for memory.
 
-| Command | Operation |
-| --- | --- |
-| `pnpm benchmark:cold` | One fresh `compiler.run()` compilation. |
-| `pnpm benchmark:mechanism` | One real cold compilation, graph-scale warm resolver replay, and a one-request cold/warm probe. |
-| `pnpm benchmark:watch` | One `compiler.watch()` cold build plus four `watching.invalidate()` warm builds. |
+```sh
+time pnpm exec rspack build --config rspack.config.cjs
+```
 
-`pnpm layout` verifies the package path:
+## Select a matrix cell without mismatched locks
 
-- `isolated` must report a symlink whose real path contains
-  `node_modules/.pnpm/.../node_modules/@fluentui/react-icons`.
-- `hoisted` must report a non-symlinked package directly under `node_modules`.
+Use a separate fresh checkout for each cell. That is the simplest way to avoid
+pnpm retaining workspace-local `node_modules` from the other layout.
 
-Generated output is confined to `.rspack-benchmark-output` and removed before
-each benchmark process exits.
+### Fixed-version control: core 2.0.3, CLI 2.0.4, isolated
 
-## Reproducing the other cells
+Start in a fresh canonical checkout. Leave `nodeLinker: isolated` unchanged and
+run this exact package command. It changes both the manifest and lockfile, so
+do **not** run a frozen install after it.
 
-Keep `src/`, `scripts/`, and `rspack.config.mjs` unchanged. To select a cell:
+```sh
+pnpm --filter @copy-repro/artifact-viewer add --save-dev --save-exact @rspack/core@2.0.3
+cd apps/artifact-viewer
+rm -rf dist
+/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
+```
 
-1. Edit `pnpm-workspace.yaml` to set `nodeLinker: isolated` or
-   `nodeLinker: hoisted`.
-2. Select an exact Rspack version:
+`@rspack/cli` remains 2.0.4. The final raw records print both
+`pnpm exec rspack --version` and the resolved core version to prove this.
 
-   ```sh
-   pnpm add --save-dev --save-exact @rspack/core@2.0.4
-   pnpm add --save-dev --save-exact @rspack/core@2.0.5
-   pnpm add --save-dev --save-exact @rspack/core@2.0.6
-   pnpm add --save-dev --save-exact @rspack/core@2.1.9
-   ```
+### Layout control: core 2.0.4, CLI 2.0.4, hoisted
 
-3. Materialize and measure the selected cell:
+Start in a fresh canonical checkout. Change only this setting:
 
-   ```sh
-   rm -rf node_modules
-   pnpm install --frozen-lockfile
-   pnpm layout
-   pnpm benchmark
-   ```
+```yaml
+nodeLinker: hoisted
+```
 
-Every benchmark fails before compiling when `nodeLinker` and the observed
-virtual-store layout disagree. Restore the canonical state with
-`nodeLinker: isolated`, `@rspack/core@2.1.9`, then a clean frozen install.
+Then clean ignored install artifacts and materialize the same canonical lock:
 
-## Root-relative byte metrics
+```sh
+git clean -fdX
+pnpm install --frozen-lockfile
+cd apps/artifact-viewer
+rm -rf dist
+/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
+```
 
-All headline path-byte values are calculated from
-`path.relative(<fixture-root>, dependencyPath)`, so moving the clone does not
-change a ratio. Raw absolute-path bytes remain in
-[`results/final-matrix.json`](results/final-matrix.json) only for diagnostics.
+For the fourth cell, make the `nodeLinker: hoisted` edit above and then run the
+core-only 2.0.3 command from the fixed-version section.
 
-The exposed `compilation.missingDependencies` value is a globally deduplicated
-set. It is deliberately reported as a **layout-only** metric, not as evidence
-of #236 replay:
+If a checkout was changed in place after this fixture has been committed,
+restore the canonical version and lock before using `--frozen-lockfile`:
 
-| Layout | Deduplicated paths | Root-relative bytes |
-| --- | ---: | ---: |
-| hoisted | 3,473 | 236,612 |
-| isolated | 4,737 | 889,578 |
+```sh
+cd "$(git rev-parse --show-toplevel)"
+git restore apps/artifact-viewer/package.json pnpm-lock.yaml pnpm-workspace.yaml
+git clean -fdX
+pnpm install --frozen-lockfile
+```
 
-Those values are identical across 2.0.4 and 2.1.9 for a given layout. They
-quantify the longer isolated path shape, but cannot show repeated warm records.
+`git clean -fdX` is appropriate only in a disposable fixture checkout. It
+removes ignored `node_modules` and `dist` directories, not tracked timing logs.
 
-## Exact warm-cache mechanism
+## Final 2 x 2 matrix
 
-`benchmark:mechanism` collects the actual bare `(context, request)` occurrences
-from `NormalModuleFactory` during a real cold compile. It then replays every
-occurrence through the compilation shared normal-resolver cache and sums
-missing records and root-relative bytes **per occurrence**. Resolver option
-sets vary by dependency category, so this measures warm-record volume for the
-same real request set rather than exactly re-running compilation resolution.
-It models the per-dependency `FactorizeInfo` retention surface before a global
-set can deduplicate it.
+All results below were collected on macOS arm64 with Node 24.16.0 and pnpm
+11.22.0. Each cell has three fresh Rspack processes. `Max RSS` is the
+`/usr/bin/time -l` `maximum resident set size`, converted to MiB.
 
-The simple one-request probe resolves `react` twice from the installed Fluent
-icon distribution:
+| Core | CLI | pnpm nodeLinker | Wall-time trials (s) | Median [range] (s) | Max RSS median [range] (MiB) |
+| --- | --- | --- | --- | --- | --- |
+| 2.0.3 | 2.0.4 | hoisted | 0.68, 0.67, 0.72 | 0.68 [0.67, 0.72] | 209.33 [209.22, 215.41] |
+| 2.0.3 | 2.0.4 | isolated | 0.71, 0.96, 0.68 | 0.71 [0.68, 0.96] | 211.58 [209.16, 213.69] |
+| 2.0.4 | 2.0.4 | hoisted | 0.69, 0.68, 0.94 | 0.69 [0.68, 0.94] | 210.00 [209.64, 211.39] |
+| 2.0.4 | 2.0.4 | isolated | 53.10, 52.06, 53.48 | 53.10 [52.06, 53.48] | 214.30 [211.75, 217.52] |
 
-| Linker / Rspack | Cold missing records / root-relative bytes | Warm missing records / root-relative bytes | Warm missing `node_modules` records |
-| --- | --- | --- | ---: |
-| hoisted / 2.0.4 | 5 / 217 | 1 / 55 | 0 |
-| isolated / 2.0.4 | 5 / 527 | 1 / 117 | 0 |
-| hoisted / 2.1.9 | 5 / 217 | 5 / 217 | 4 |
-| isolated / 2.1.9 | 5 / 527 | 5 / 527 | 4 |
+The final affected median clears both independent gates:
 
-The graph-scale replay is the primary measurement:
+- Holding the isolated layout and CLI 2.0.4 fixed, core 2.0.4 is **74.8x**
+  the core 2.0.3 median.
+- Holding core and CLI 2.0.4 fixed, isolated is **77.0x** the hoisted median.
+- Both affected-versus-control median deltas exceed **52 seconds**, well above
+  the required 15 seconds.
 
-| Linker / Rspack | Occurrences | Unique pairs | First-pass missing records / root-relative bytes | Second-pass result |
-| --- | ---: | ---: | --- | --- |
-| hoisted / 2.0.4 | 5,675 | 3,811 | 21,104 / 1,377,952 | 20,007 / 1,299,821; not identical |
-| isolated / 2.0.4 | 5,675 | 3,811 | 21,406 / 4,297,854 | 20,153 / 4,051,212; not identical |
-| hoisted / 2.1.9 | 5,675 | 3,811 | 52,723 / 2,966,386 | byte-identical |
-| isolated / 2.1.9 | 5,675 | 3,811 | 52,867 / 10,176,479 | byte-identical |
+Removing only `CopyRspackPlugin` from the canonical 2.0.4/2.0.4 isolated
+configuration produced 0.68, 0.67, and 0.93 seconds: a **0.68 second
+median**. The exact control diff is
+[`logs/plugin-removal-control.diff`](logs/plugin-removal-control.diff).
 
-Thus the same 5,675 real bare occurrences retain about 2.5x as many warm
-records after #236, while isolated's root-relative replay bytes are 3.43x
-hoisted's on 2.1.9.
+The self-identifying raw `/usr/bin/time -lp` transcripts are in
+[`logs/raw/final/`](logs/raw/README.md). The measurement method, candidate
+reduction data, and output parity are in
+[`logs/measurement-record.md`](logs/measurement-record.md).
 
-The 2.0.4 first pass still emits about 1.1k-1.3k missing `node_modules`
-records from normal resolution paths outside `cached_node_modules`; its second
-pass sheds those records as more paths become cached. The approximately 30x
-jump to 32.7k records on 2.1.9 is the #236 replay, and its second pass remains
-byte-identical.
+## Deliberately small source and filesystem graph
 
-The boundary is self-contained on the canonical isolated layout:
+The compiler has one JavaScript module:
 
-| Rspack | One-request warm missing records / root-relative bytes | Warm missing `node_modules` records | First / second graph-scale warm missing records / root-relative bytes |
-| --- | --- | ---: | --- |
-| 2.0.4 | 1 / 117 | 0 | 21,406 / 4,297,854; 20,153 / 4,051,212 |
-| 2.0.5 | 1 / 117 | 0 | 21,406 / 4,297,854; 20,153 / 4,051,212 |
-| 2.0.6 | 5 / 527 | 4 | 52,867 / 10,176,479; byte-identical |
-| 2.1.9 | 5 / 527 | 4 | 52,867 / 10,176,479; byte-identical |
+```text
+apps/artifact-viewer/src/index.js
+```
 
-## Resource trials
+Its entire configuration-relevant behavior is the literal copy pattern:
 
-Two clean trials were run for every resource cell. `watchPeakRss` is the
-maximum process RSS over all five builds, not a per-build allocation. The
-first/final build values and their process-peak difference are retained in the
-result artifact with explicit names.
+```js
+new CopyRspackPlugin({
+  patterns: [{ from: "./index.html", to: "./" }],
+})
+```
 
-| Linker / Rspack | Cold elapsed / peak RSS, T1 | Cold elapsed / peak RSS, T2 | Five-build elapsed / watch peak RSS, T1 | Five-build elapsed / watch peak RSS, T2 |
-| --- | --- | --- | --- | --- |
-| hoisted / 2.0.4 | 2,613 ms / 1,189.2 MiB | 2,657 ms / 1,184.9 MiB | 13,377 ms / 1,795.2 MiB | 13,399 ms / 1,817.4 MiB |
-| isolated / 2.0.4 | 2,867 ms / 1,221.7 MiB | 2,754 ms / 1,224.0 MiB | 14,364 ms / 1,889.6 MiB | 14,693 ms / 1,881.6 MiB |
-| hoisted / 2.1.9 | 776 ms / 1,131.7 MiB | 787 ms / 1,141.0 MiB | 4,187 ms / 1,979.9 MiB | 4,043 ms / 1,980.7 MiB |
-| isolated / 2.1.9 | 790 ms / 1,175.5 MiB | 754 ms / 1,173.3 MiB | 4,025 ms / 1,990.5 MiB | 4,484 ms / 2,044.0 MiB |
+The checked-in workspace manifests form this transparent DAG:
 
-Using the correctly labeled `watchFinalMinusFirstPeakRss` field, 2.0.4 grows
-about **619-629 MiB** hoisted and **638-639 MiB** isolated. Rspack 2.1.9 grows
-about **849-854 MiB** hoisted and **810-861 MiB** isolated. Cold RSS moves in
-the opposite direction across versions. Absolute n=2 watch peaks do not cleanly
-separate layouts, so deterministic graph-scale replay is the regression signal.
+```text
+artifact-viewer
+  -> 4 fanout packages
+  -> 4 relay packages
+  -> 3 branch packages
+  -> 3 leaf packages
+  -> @fluentui/react-icons@2.0.332
+```
 
-## Root cause and scope
+This is `4 * 4 * 3 * 3 = 144` distinct leaf paths. Each leaf has a real
+public `@fluentui/react-icons` dependency, whose published package contains
+46,742 files on the measured host. The workspace paths amplify directory
+traversal without adding compiler modules or generated code.
 
-| `@rspack/core` | Resolver state |
-| --- | --- |
-| `2.0.4` | Last known good; uses `rspack_resolver` `0.8.0`. |
-| `2.0.6+` | Includes [`11e45f5`](https://github.com/rstackjs/rspack-resolver/commit/11e45f5e8dfcbcd994d80723a48226a6f2c24ae3), [PR #236](https://github.com/rstackjs/rspack-resolver/pull/236). |
-| `2.1.9` | Retains the affected warm-cache behavior. |
+The final graph was minimized empirically. The 13-package 108-path and
+12-package 81-path candidates both failed the 50x gate; the complete candidate
+table and raw transcripts are retained in
+[`logs/iteration-notes.md`](logs/iteration-notes.md).
 
-[`11e45f5`](https://github.com/rstackjs/rspack-resolver/blob/11e45f5e8dfcbcd994d80723a48226a6f2c24ae3/src/cache.rs#L278-L290)
-replays a missing `<ancestor>/node_modules` dependency when a cached
-`node_modules` lookup is absent. [`b138142`](https://github.com/rstackjs/rspack-resolver/commit/b138142a23ae223bba97901381b040ebc11532fa),
-[PR #232](https://github.com/rstackjs/rspack-resolver/pull/232), changed
-resolver context values to `ResolverPath`; the replay branch passes a fresh
-`self.path.join("node_modules")`.
+Under isolated pnpm, the clean final materialization has 15 workspace-local
+`node_modules` directories and 49 workspace symlinks. Under hoisted pnpm, the
+workspace links remain but leaves no longer have local public-package links; it
+has 12 local `node_modules` directories and 41 workspace symlinks.
 
-The relevant retained surface is per-dependency
-[`FactorizeInfo`](https://github.com/web-infra-dev/rspack/blob/v2.1.9/crates/rspack_core/src/dependency/factorize_info.rs)
-missing-dependency sets.
+Every final 2 x 2 transcript reports the same one module, Rspack compilation
+hash, and output hashes:
 
-This fixture deliberately excludes the separate tsconfig project-references
-issue in [rspack-resolver #200](https://github.com/rstackjs/rspack-resolver/issues/200)
-and [#213](https://github.com/rstackjs/rspack-resolver/issues/213): there is no
-`tsconfig.json`, project references, TypeScript source, or `resolve.tsConfig`.
+```text
+Rspack compilation hash: 9e2b16be98e9b848
+bundle.js SHA-256:      46dc534e192706175ec6ff369a7438c22e86fd1e27ce83b3190a77af076905ba
+index.html SHA-256:     f37dbb8d4d8553e9182a0c4503d239a52caa88c64ff28c53e05ba66b7fbfeca0
+```
 
-## Limitations
+## Root-cause investigation
 
-Rspack 2.1.9 includes unrelated performance improvements and is faster overall
-than 2.0.4 here, so cross-version elapsed time is not a generic CPU benchmark.
-Process RSS is also allocator-sensitive. The version boundary and the
-layout-sensitive replay volume are established by the deterministic raw
-resolver measurement, while the resource trials provide the visible
-build-level signal.
+**Source-patch proven.** The exact v2.0.4
+[`patch D`](logs/source-fix/patch-D-literal-file-bypass-v2.0.4.diff) changes
+only `CopyRspackPlugin` handling for `FromType::File`. After `metadata()` has
+already established that the literal source exists, it returns that one path
+instead of calling `find_files_by_glob` on the literal. The patch is one file,
+15 additions, and 6 deletions.
+
+The causal-verifier public fixture moves from a 39.23-second stock median to a
+0.68-second patch-D median with `CopyRspackPlugin` still enabled. That matches
+the 0.69-second core-2.0.3 boundary and 0.68-second plugin-removal controls,
+while retaining the same compilation and output hashes. This makes the
+recursive literal-file walk necessary and sufficient for the reproduced
+wall-time regression.
+
+**Office source-patch proof.** The verified Artifact Viewer Host case moves
+from 673.44 seconds with stock v2.0.4 to a 0.18-second patched-D median with
+the plugin present and `index.html` emitted; the verifier reports a 5.17-second
+patched-D Boot result. The copied Office raw records retain the module and
+missing-dependency counts alongside both timing clocks.
+
+**Resolver #236 disproven as the cause.** Removing #236's missing-dependency
+replay changes a stock 2.1.9 Boot run from 653.228 to 753.984 seconds while
+leaving its 19,744 missing dependencies unchanged. The no-copy sweep remains
+fast across core 2.0.1 through 2.1.9. The archived resolver work describes a
+real bookkeeping behavior, but it is not the wall-time cause.
+
+**Microsoft Defender caveat.** Locally rebuilt native bindings can receive
+endpoint-protection scanning, including Microsoft Defender, which can perturb
+absolute first-run timings. The source-patch conclusion relies on repeated
+trials, unchanged configuration, copied raw outputs, and module/output parity,
+not a single timing. It does not weaken the one-file stock-versus-D contrast.
+
+The complete commands, exact patch, public fixture transcripts, Office
+Host/Boot records, #236 A/B evidence, no-copy sweep, and caveat are in
+[`logs/source-fix/`](logs/source-fix/README.md).
+
+## Limits
+
+Wall time depends on filesystem cache, CPU, storage, Node, pnpm, and the
+platform's Rspack binary. Each recorded invocation used a fresh process and a
+clean output directory, but did not flush the operating-system file cache.
+Absolute times may change elsewhere; the version and layout contrast are the
+signal.
+
+The fixture is intentionally not an Office-Bohemia project and makes no claim
+to reproduce every production dependency or memory behavior. It uses a compact
+workspace DAG so the bad run completes in about 53 seconds rather than
+requiring the more-than-ten-minute Office case.
