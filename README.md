@@ -17,7 +17,7 @@ From a fresh checkout:
 ```sh
 pnpm install
 cd test-app
-/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
+/usr/bin/time -lp pnpm build
 ```
 
 On macOS, `/usr/bin/time -lp` reports wall time and maximum resident set size. On Linux, use `/usr/bin/time -v`; portable `time` is sufficient when only wall time is needed.
@@ -33,7 +33,7 @@ Keep `nodeLinker: isolated` in `pnpm-workspace.yaml`, then change only `@rspack/
 ```sh
 pnpm --filter test-app add --save-dev --save-exact @rspack/core@2.0.3
 cd test-app
-/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
+/usr/bin/time -lp pnpm build
 ```
 
 `@rspack/cli` remains fixed at 2.0.4.
@@ -52,7 +52,7 @@ Then materialize the hoisted layout and run the same build:
 git clean -fdX
 pnpm install
 cd test-app
-/usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
+/usr/bin/time -lp pnpm build
 ```
 
 `git clean -fdX` removes ignored install and build artifacts, so use it only in a disposable checkout.
