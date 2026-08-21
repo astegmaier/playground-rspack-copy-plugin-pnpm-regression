@@ -8,7 +8,7 @@
     "@copy-repro/fanout-b": "workspace:*",
     "@copy-repro/fanout-c": "workspace:*",
     "@copy-repro/fanout-d": "workspace:*",
-    "@rspack/cli": "2.0.4",
-    "@rspack/core": "2.0.4"
+    "@rspack/cli": "2.1.10",
+    "@rspack/core": "2.1.10"
   }
 }
