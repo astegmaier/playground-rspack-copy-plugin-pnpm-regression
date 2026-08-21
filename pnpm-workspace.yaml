@@ -2,4 +2,7 @@ packages:
   - test-app
   - packages/*
 
+# 'isolated' layout is necessary to see the regression in @rspack/core@2.0.4
 nodeLinker: isolated
+# 'hoisted' layout has great performance with @rspack/core@2.0.4
+# nodeLinker: hoisted

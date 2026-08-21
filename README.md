@@ -16,8 +16,7 @@ From a fresh checkout:
 
 ```sh
 pnpm install
-cd test-app
-pnpm build
+pnpm --filter test-app build
 ```
 
 Result:
@@ -28,21 +27,18 @@ Rspack compiled in 35.84 s (9e2b16be98e9b848)
 
 You can also gather memory statistics with these commands:
 
-- macOS: `/usr/bin/time -lp pnpm build`
-- Linux: `/usr/bin/time -v pnpm build`
+- macOS: `/usr/bin/time -lp pnpm --filter test-app build`
+- Linux: `/usr/bin/time -v pnpm --filter test-app build`
 
 ## Repro Steps (Baseline)
-
-Use a fresh checkout for each baseline so the lockfile and materialized `node_modules` layout cannot leak between cases.
 
 ### @rspack/core 2.0.3 with isolated pnpm
 
 Keep `nodeLinker: isolated` in `pnpm-workspace.yaml`, then change only `@rspack/core`:
 
 ```sh
-cd test-app
-pnpm add @rspack/core@2.0.3
-pnpm build
+pnpm --filter test-app add @rspack/core@2.0.3
+pnpm --filter test-app build
 ```
 
 Result:
@@ -62,13 +58,18 @@ nodeLinker: hoisted
 Then materialize the hoisted layout and run the same build:
 
 ```sh
-git clean -fdX # remove the isolated node_modules layout
+pnpm clean # IMPORTANT: remove the isolated node_modules layout artifacts
 pnpm install
-cd test-app
-pnpm build
+pnpm --filter test-app build
 ```
 
-## Results
+Result:
+
+```
+Rspack compiled in 17 ms (9e2b16be98e9b848)
+```
+
+## Results Summary
 
 Measurements were collected on macOS arm64 with Node 24.16.0 and pnpm 11.22.0. Each cell contains three fresh Rspack processes. All cells compile one module and emit identical output hashes.
 
