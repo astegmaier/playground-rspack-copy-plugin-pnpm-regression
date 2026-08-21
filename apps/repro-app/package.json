@@ -1,5 +1,5 @@
 {
-  "name": "@copy-repro/artifact-viewer",
+  "name": "@copy-repro/repro-app",
   "version": "0.0.0",
   "private": true,
   "devDependencies": {

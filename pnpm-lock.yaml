@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  apps/artifact-viewer:
+  apps/repro-app:
     devDependencies:
       '@copy-repro/fanout-a':
         specifier: workspace:*
