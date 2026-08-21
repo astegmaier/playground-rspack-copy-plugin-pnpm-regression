@@ -2,7 +2,7 @@
 
 ## Summary
 
-Rspack 2.0.4 introduces a severe `CopyRspackPlugin` performance regression in complex pnpm monorepos that use the isolated, symlink-based `node_modules` layout. In this public reproduction, changing only `@rspack/core` from 2.0.3 to 2.0.4 increases build time from 0.71 seconds to 53.10 seconds; changing only pnpm from `isolated` to `hoisted` reduces the 2.0.4 build to 0.69 seconds.
+Rspack 2.0.4 introduces a severe `CopyRspackPlugin` performance regression in complex pnpm monorepos that use the isolated, symlink-based `node_modules` layout. In this public reproduction, changing only `@rspack/core` from 2.0.3 to 2.0.4 increases Rspack's median build time from 6 milliseconds to 41.47 seconds; changing only pnpm from `isolated` to `hoisted` reduces the 2.0.4 median to 16 milliseconds.
 
 ## Repro Steps (Regression)
 
@@ -73,14 +73,14 @@ Rspack compiled in 17 ms (9e2b16be98e9b848)
 
 Measurements were collected on macOS arm64 with Node 24.16.0 and pnpm 11.22.0. Each cell contains three fresh Rspack processes. All cells compile one module and emit identical output hashes.
 
-| Core | CLI | pnpm layout | Wall time median [range] | Max RSS median [range] |
+| Core | CLI | pnpm layout | Wall time | Max RSS median |
 | --- | --- | --- | ---: | ---: |
-| 2.0.3 | 2.0.4 | hoisted | 0.68 s [0.67, 0.72] | 209.33 MiB [209.22, 215.41] |
-| 2.0.3 | 2.0.4 | isolated | 0.71 s [0.68, 0.96] | 211.58 MiB [209.16, 213.69] |
-| 2.0.4 | 2.0.4 | hoisted | 0.69 s [0.68, 0.94] | 210.00 MiB [209.64, 211.39] |
-| 2.0.4 | 2.0.4 | isolated | **53.10 s [52.06, 53.48]** | 214.30 MiB [211.75, 217.52] |
+| 2.0.3 | 2.0.4 | hoisted | 8 ms | 209.33 MiB |
+| 2.0.3 | 2.0.4 | isolated | 6 ms | 211.58 MiB |
+| 2.0.4 | 2.0.4 | hoisted | 16 ms | 210.00 MiB |
+| 2.0.4 | 2.0.4 | isolated | **41.47 s** | 214.30 MiB |
 
-With the isolated layout and CLI fixed, core 2.0.4 is **74.8x slower** than 2.0.3. With core and CLI fixed at 2.0.4, the isolated layout is **77.0x slower** than the hoisted layout.
+With the isolated layout and CLI fixed, core 2.0.4 is approximately **6,912x slower** than 2.0.3. With core and CLI fixed at 2.0.4, the isolated layout is approximately **2,592x slower** than the hoisted layout.
 
 The fixture models a complex monorepo with a small workspace dependency DAG. The entry contains one JavaScript module; the workspace packages exist only to create repeated symlink paths to a large public dependency. This isolates the filesystem traversal from module compilation.
 
