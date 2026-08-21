@@ -15,7 +15,7 @@ The checked-in state uses the affected combination:
 From a fresh checkout:
 
 ```sh
-pnpm install --frozen-lockfile
+pnpm install
 cd test-app
 /usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
 ```
@@ -49,13 +49,13 @@ nodeLinker: hoisted
 Then materialize the hoisted layout and run the same build:
 
 ```sh
-pnpm clean
-pnpm install --frozen-lockfile
+git clean -fdX
+pnpm install
 cd test-app
 /usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
 ```
 
-`pnpm clean` removes ignored install and build artifacts, so use it only in a disposable checkout.
+`git clean -fdX` removes ignored install and build artifacts, so use it only in a disposable checkout.
 
 ## Results
 

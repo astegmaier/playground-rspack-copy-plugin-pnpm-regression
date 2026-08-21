@@ -2,8 +2,5 @@
   "name": "rspack-copy-plugin-pnpm-regression",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@11.22.0",
-  "scripts": {
-    "clean": "git clean -fdX"
-  }
+  "packageManager": "pnpm@11.22.0"
 }
