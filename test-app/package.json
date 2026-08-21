@@ -3,7 +3,7 @@
   "scripts": {
     "build": "rspack build --config rspack.config.cjs"
   },
-  "devDependencies": {
+  "dependencies": {
     "@copy-repro/fanout-a": "workspace:*",
     "@copy-repro/fanout-b": "workspace:*",
     "@copy-repro/fanout-c": "workspace:*",

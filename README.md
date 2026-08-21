@@ -17,28 +17,41 @@ From a fresh checkout:
 ```sh
 pnpm install
 cd test-app
-/usr/bin/time -lp pnpm build
+pnpm build
 ```
 
-On macOS, `/usr/bin/time -lp` reports wall time and maximum resident set size. On Linux, use `/usr/bin/time -v`; portable `time` is sufficient when only wall time is needed.
+Result:
+
+```sh
+Rspack compiled in 35.84 s (9e2b16be98e9b848)
+```
+
+You can also gather memory statistics with these commands:
+
+- macOS: `/usr/bin/time -lp pnpm build`
+- Linux: `/usr/bin/time -v pnpm build`
 
 ## Repro Steps (Baseline)
 
 Use a fresh checkout for each baseline so the lockfile and materialized `node_modules` layout cannot leak between cases.
 
-### Rspack 2.0.3 with isolated pnpm
+### @rspack/core 2.0.3 with isolated pnpm
 
 Keep `nodeLinker: isolated` in `pnpm-workspace.yaml`, then change only `@rspack/core`:
 
 ```sh
-pnpm --filter test-app add --save-dev --save-exact @rspack/core@2.0.3
 cd test-app
-/usr/bin/time -lp pnpm build
+pnpm add @rspack/core@2.0.3
+pnpm build
 ```
 
-`@rspack/cli` remains fixed at 2.0.4.
+Result:
 
-### Rspack 2.0.4 with hoisted pnpm
+```
+Rspack compiled in 15 ms (9e2b16be98e9b848)
+```
+
+### @rspack/core 2.0.4 with hoisted pnpm
 
 Keep both Rspack packages at 2.0.4 and change only `pnpm-workspace.yaml`:
 
@@ -49,13 +62,11 @@ nodeLinker: hoisted
 Then materialize the hoisted layout and run the same build:
 
 ```sh
-git clean -fdX
+git clean -fdX # remove the isolated node_modules layout
 pnpm install
 cd test-app
-/usr/bin/time -lp pnpm build
+pnpm build
 ```
-
-`git clean -fdX` removes ignored install and build artifacts, so use it only in a disposable checkout.
 
 ## Results
 

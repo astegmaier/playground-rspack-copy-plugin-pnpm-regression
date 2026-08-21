@@ -180,7 +180,7 @@ importers:
         version: link:../branch-c
 
   test-app:
-    devDependencies:
+    dependencies:
       '@copy-repro/fanout-a':
         specifier: workspace:*
         version: link:../packages/fanout-a
