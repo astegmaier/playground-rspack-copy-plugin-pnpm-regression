@@ -2,7 +2,7 @@
 
 ## Summary
 
-Rspack 2.0.4 introduces a severe `CopyRspackPlugin` performance regression in complex pnpm monorepos that use the isolated, symlink-based `node_modules` layout. In this public reproduction, changing only `@rspack/core` from 2.0.3 to 2.0.4 increases Rspack's median build time from 6 milliseconds to 41.47 seconds; changing only pnpm from `isolated` to `hoisted` reduces the 2.0.4 median to 16 milliseconds.
+Rspack 2.0.4 introduces a severe `CopyRspackPlugin` performance regression in complex pnpm monorepos that use the isolated, symlink-based `node_modules` layout. In this public reproduction, changing only `@rspack/core` from 2.0.3 to 2.0.4 increases Rspack's median build time from 6 milliseconds to 41.47 seconds; changing only pnpm from `isolated` to `hoisted` reduces the 2.0.4 median to 16 milliseconds. The regression does not reproduce with the latest release, 2.1.10.
 
 ## Repro Steps (Regression)
 
@@ -79,8 +79,12 @@ Measurements were collected on macOS arm64 with Node 24.16.0 and pnpm 11.22.0. E
 | 2.0.3 | 2.0.4 | isolated | 6 ms | 211.58 MiB |
 | 2.0.4 | 2.0.4 | hoisted | 16 ms | 210.00 MiB |
 | 2.0.4 | 2.0.4 | isolated | **41.47 s** | 214.30 MiB |
+| 2.1.10 | 2.1.10 | hoisted | 8 ms | 211.63 MiB |
+| 2.1.10 | 2.1.10 | isolated | 10 ms | 211.75 MiB |
 
 With the isolated layout and CLI fixed, core 2.0.4 is approximately **6,912x slower** than 2.0.3. With core and CLI fixed at 2.0.4, the isolated layout is approximately **2,592x slower** than the hoisted layout.
+
+The latest 2.1.10 release completes in milliseconds under both layouts, confirming that this regression has been fixed in a later release.
 
 The fixture models a complex monorepo with a small workspace dependency DAG. The entry contains one JavaScript module; the workspace packages exist only to create repeated symlink paths to a large public dependency. This isolates the filesystem traversal from module compilation.
 
