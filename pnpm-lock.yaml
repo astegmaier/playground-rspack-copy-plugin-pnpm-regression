@@ -8,27 +8,6 @@ importers:
 
   .: {}
 
-  apps/repro-app:
-    devDependencies:
-      '@copy-repro/fanout-a':
-        specifier: workspace:*
-        version: link:../../packages/fanout-a
-      '@copy-repro/fanout-b':
-        specifier: workspace:*
-        version: link:../../packages/fanout-b
-      '@copy-repro/fanout-c':
-        specifier: workspace:*
-        version: link:../../packages/fanout-c
-      '@copy-repro/fanout-d':
-        specifier: workspace:*
-        version: link:../../packages/fanout-d
-      '@rspack/cli':
-        specifier: 2.0.4
-        version: 2.0.4(@rspack/core@2.0.4(@swc/helpers@0.5.23))
-      '@rspack/core':
-        specifier: 2.0.4
-        version: 2.0.4(@swc/helpers@0.5.23)
-
   packages/branch-a:
     dependencies:
       '@copy-repro/leaf-a':
@@ -199,6 +178,27 @@ importers:
       '@copy-repro/branch-c':
         specifier: workspace:*
         version: link:../branch-c
+
+  test-app:
+    devDependencies:
+      '@copy-repro/fanout-a':
+        specifier: workspace:*
+        version: link:../packages/fanout-a
+      '@copy-repro/fanout-b':
+        specifier: workspace:*
+        version: link:../packages/fanout-b
+      '@copy-repro/fanout-c':
+        specifier: workspace:*
+        version: link:../packages/fanout-c
+      '@copy-repro/fanout-d':
+        specifier: workspace:*
+        version: link:../packages/fanout-d
+      '@rspack/cli':
+        specifier: 2.0.4
+        version: 2.0.4(@rspack/core@2.0.4(@swc/helpers@0.5.23))
+      '@rspack/core':
+        specifier: 2.0.4
+        version: 2.0.4(@swc/helpers@0.5.23)
 
 packages:
 

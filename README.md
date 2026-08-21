@@ -16,8 +16,7 @@ From a fresh checkout:
 
 ```sh
 pnpm install --frozen-lockfile
-cd apps/repro-app
-rm -rf dist
+cd test-app
 /usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
 ```
 
@@ -32,9 +31,8 @@ Use a fresh checkout for each baseline so the lockfile and materialized `node_mo
 Keep `nodeLinker: isolated` in `pnpm-workspace.yaml`, then change only `@rspack/core`:
 
 ```sh
-pnpm --filter @copy-repro/repro-app add --save-dev --save-exact @rspack/core@2.0.3
-cd apps/repro-app
-rm -rf dist
+pnpm --filter test-app add --save-dev --save-exact @rspack/core@2.0.3
+cd test-app
 /usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
 ```
 
@@ -51,14 +49,13 @@ nodeLinker: hoisted
 Then materialize the hoisted layout and run the same build:
 
 ```sh
-git clean -fdX
+pnpm clean
 pnpm install --frozen-lockfile
-cd apps/repro-app
-rm -rf dist
+cd test-app
 /usr/bin/time -lp pnpm exec rspack build --config rspack.config.cjs
 ```
 
-`git clean -fdX` removes ignored install and build artifacts, so use it only in a disposable checkout.
+`pnpm clean` removes ignored install and build artifacts, so use it only in a disposable checkout.
 
 ## Results
 

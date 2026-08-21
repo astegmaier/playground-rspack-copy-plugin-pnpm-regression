@@ -1,5 +1,5 @@
 packages:
-  - apps/*
+  - test-app
   - packages/*
 
 nodeLinker: isolated
