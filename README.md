@@ -1,5 +1,7 @@
 # Rspack CopyRspackPlugin regression with pnpm isolated layout
 
+Tracked upstream in [web-infra-dev/rspack#15289](https://github.com/web-infra-dev/rspack/issues/15289).
+
 ## Summary
 
 `CopyRspackPlugin` has a severe performance regression in complex pnpm monorepos that use the isolated, symlink-based `node_modules` layout. It is present in `@rspack/core@2.1.10`, the current `latest` release, and appears to have been introduced in `@rspack/core@2.0.4`.
