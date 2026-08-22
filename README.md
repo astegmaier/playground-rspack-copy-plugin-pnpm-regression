@@ -87,8 +87,12 @@ Measurements were collected on macOS arm64 with Node 24.16.0 and pnpm 11.22.0. E
 | 2.0.4 | 2.0.4 | isolated | **41.99 s** | 212.1 MiB |
 | 2.1.10 | 2.1.10 | hoisted | 15 ms | 211.1 MiB |
 | 2.1.10 | 2.1.10 | isolated | **41.52 s** | 211.3 MiB |
+| 2.2.0-rc.0 | 2.2.0-rc.0 | hoisted | 15 ms | 211.47 MiB |
+| 2.2.0-rc.0 | 2.2.0-rc.0 | isolated | **38.55 s** | 211.48 MiB |
 
 The 2.0.4 rows show where the regression began. The 2.1.10 rows show its current state: isolated 2.1.10 is within 1.1% of isolated 2.0.4.
+
+The 2.2.0-rc.0 prerelease also remains affected: its isolated build is approximately **2,570x slower** than its hoisted build.
 
 With `@rspack/cli` held at 2.1.10 and the isolated layout, core 2.1.10 is approximately **5,931x slower** than core 2.0.3. With core and CLI fixed at 2.1.10, the isolated layout is approximately **2,768x slower** than the hoisted layout.
 
@@ -96,7 +100,7 @@ The fixture models a complex monorepo with a small workspace dependency DAG. The
 
 ## Root cause analysis
 
-The regression begins with Rspack commit [`7cf13166ba`](https://github.com/web-infra-dev/rspack/commit/7cf13166ba23eae192aac0fb25877415b3c8e8d4), merged in [PR #14023](https://github.com/web-infra-dev/rspack/pull/14023), first released in `@rspack/core@2.0.4`, and still present in 2.1.10. The change routes `CopyRspackPlugin` file matching through a custom recursive `find_files_by_glob` implementation.
+The regression begins with Rspack commit [`7cf13166ba`](https://github.com/web-infra-dev/rspack/commit/7cf13166ba23eae192aac0fb25877415b3c8e8d4), merged in [PR #14023](https://github.com/web-infra-dev/rspack/pull/14023), first released in `@rspack/core@2.0.4`, and still present in 2.1.10 and 2.2.0-rc.0. The change routes `CopyRspackPlugin` file matching through a custom recursive `find_files_by_glob` implementation.
 
 For a literal pattern such as `from: "./index.html"`, Rspack first confirms that the source is a file, but then recursively walks the file's entire parent directory to find that one known path. The walker follows pnpm's workspace and package symlinks and does not deduplicate previously visited targets. A complex isolated-layout monorepo therefore exposes the same large dependency trees through many lexical paths.
 
